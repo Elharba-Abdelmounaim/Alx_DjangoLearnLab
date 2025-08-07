@@ -1,16 +1,16 @@
 # relationship_app/views.py
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
 
-from django.http import HttpResponse
-from django.views.generic.detail import DetailView
-from .models import Book, Library
+class CustomLoginView(LoginView):
+    template_name = 'relationship_app/login.html'
 
-#  دالة عرض بسيطة تعيد الكتب كنص عادي
-def list_books(request):
-     books = Book.objects.all()
-    return render(request, 'relationship_app/list_books.html', {'books': books})
+class CustomLogoutView(LogoutView):
+    template_name = 'relationship_app/logout.html'
 
-# عرض صفّي باستخدام DetailView لمكتبة معينة
-class LibraryDetailView(DetailView):
-     model = Library
-    template_name = 'relationship_app/library_detail.html'
-    context_object_name = 'library'
+class RegisterView(CreateView):
+    template_name = 'relationship_app/register.html'
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
