@@ -1,14 +1,14 @@
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 
-def register_view(request):
+def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # ← هذا السطر مفقود حسب الخطأ
-            return redirect('home')  # أو أي صفحة بعد التسجيل
+            login(request, user)
+            return redirect('home')  # يمكنك تغييره إلى أي view عندك
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
