@@ -17,7 +17,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/logout/'
-AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -29,6 +28,8 @@ SECRET_KEY = 'django-insecure-^9ff8zwh@=e)+!&s-ap2upsbsf6ru2hhs&8cv+pq9&759d(&z&
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+Auth_USER_MODEL = 'users.CustomUser'
 
 
 # Application definition
@@ -42,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf',
     'relationship_app',
-    'accounts',
+    'users',
 ]
 
 MIDDLEWARE = [
