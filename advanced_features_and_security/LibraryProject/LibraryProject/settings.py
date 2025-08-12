@@ -29,8 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-Auth_USER_MODEL = 'users.CustomUser'
-
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Application definition
 
@@ -42,8 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookshelf',
-    'relationship_app',
     'users',
+    'relationship_app',
 ]
 
 MIDDLEWARE = [
