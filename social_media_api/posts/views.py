@@ -1,11 +1,16 @@
 from rest_framework import generics, permissions
+from rest_framework.response import Response
 from .models import Post
+from accounts.models import CustomUser
 from .serializers import PostSerializer
 
-class FeedView(generics.ListAPIView):
-    serializer_class = PostSerializer
+class FeedView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Post.objects.filter(author__in=user.following.all()).order_by('-created_at')
+    def get(self, request):
+        following_users = request.user.following.all()
+
+        feed_posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+
+        serializer = PostSerializer(feed_posts, many=True)
+        return Response(serializer.data)
