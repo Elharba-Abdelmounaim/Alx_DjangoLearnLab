@@ -1,24 +1,25 @@
-from rest_framework import generics
-from rest_framework.authtoken.models import Token
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.authtoken.views import ObtainAuthToken
-from django.contrib.auth import get_user_model
-from .serializers import RegisterSerializer, UserSerializer
+from rest_framework.permissions import IsAuthenticated
+from .models import CustomUser
+from .serializers import UserSerializer
 
-User = get_user_model()
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
-class RegisterAPI(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = RegisterSerializer
+    @action(detail=True, methods=['post'])
+    def follow(self, request, pk=None):
+        user_to_follow = self.get_object()
+        if request.user == user_to_follow:
+            return Response({"detail": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
+        request.user.following.add(user_to_follow)
+        return Response({"detail": f"You are now following {user_to_follow.username}"})
 
-    def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-        user_id = response.data['id']
-        token, created = Token.objects.get_or_create(user=User.objects.get(id=user_id))
-        return Response({'user': response.data, 'token': token.key})
-
-class LoginAPI(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        token = response.data['token']
-        return Response({'token': token})
+    @action(detail=True, methods=['post'])
+    def unfollow(self, request, pk=None):
+        user_to_unfollow = self.get_object()
+        request.user.following.remove(user_to_unfollow)
+        return Response({"detail": f"You have unfollowed {user_to_unfollow.username}"})
