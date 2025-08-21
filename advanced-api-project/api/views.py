@@ -3,38 +3,36 @@ from .models import Book
 from .serializers import BookSerializer
 
 
-# --- Separate CRUD Views for Book ---
-
 # List all books
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]  # Anyone can view list
+    permission_classes = [permissions.AllowAny]
 
 
 # Retrieve single book
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]  # Anyone can view details
+    permission_classes = [permissions.AllowAny]
 
 
 # Create new book
 class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Only logged-in users
+    permission_classes = [permissions.IsAuthenticated]
 
 
 # Update existing book
 class BookUpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Only logged-in users
+    permission_classes = [permissions.IsAuthenticated]
 
 
 # Delete existing book
 class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Only logged-in users
+    permission_classes = [permissions.IsAuthenticated]
